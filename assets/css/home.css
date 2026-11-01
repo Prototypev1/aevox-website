@@ -195,7 +195,23 @@ main { position: relative; }
   .hero { padding-top: calc(var(--nav-h) + 28px); padding-bottom: 110px; }
   .hero-inner { grid-template-columns: 1fr; text-align: left; }
   .hero-stage { --pw: min(68vw, 290px); margin-top: 24px; }
-  .hero-stage .phone { transform: rotateY(-14deg) rotateX(5deg); }
+  /* Phones: one flat layer with a painted edge instead of 16 stacked 3D slices,
+     and no live blur behind the bubble. Much cheaper for a phone GPU while scrolling. */
+  .hero-stage .phone {
+    transform-style: flat;
+    transform: perspective(1200px) rotateY(-12deg) rotateX(4deg);
+    box-shadow:
+      inset 0 0 0 1.5px rgba(255, 255, 255, 0.12),
+      inset 0 0 0 4px #07060d,
+      2px 0 0 hsl(250 14% 42%),
+      4px 1px 0 hsl(250 14% 34%),
+      6px 1px 0 hsl(250 14% 28%),
+      8px 2px 0 hsl(250 14% 22%),
+      0 40px 70px -30px rgba(0, 0, 0, 0.9);
+  }
+  .hero-stage .phone-sides { display: none; }
+  .hero-stage .phone-holder { will-change: auto; }
+  .float-alert { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(22, 20, 50, 0.96); }
   .float-alert { left: 0; top: 8%; }
   .dive-cue { display: none; }
 }

@@ -82,7 +82,7 @@
   const SPR_TEAL = sprite(32, 'rgba(98,227,209,0.4)', 'rgba(220,255,250,1)');
 
   function buildParticles() {
-    const n = Math.round(clamp((W * H) / 11000, 40, 150));
+    const n = Math.round(clamp((W * H) / 11000, 40, W <= 900 ? 60 : 150));
     particles = Array.from({ length: n }, () => {
       const z = 0.25 + Math.random() * 0.75;
       const glow = Math.random() < 0.16;
@@ -99,7 +99,8 @@
 
   let lastW = 0;
   function resizeCanvas() {
-    dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    // the background is soft anyway; phones draw it at 1x to keep scrolling smooth
+    dpr = Math.min(window.devicePixelRatio || 1, W <= 900 ? 1 : 1.5);
     canvas.width = Math.round(W * dpr);
     canvas.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
