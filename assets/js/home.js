@@ -264,7 +264,21 @@
     }, { passive: true });
   }
 
+  // On phones the hero phone just scrolls with the page: per-frame transforms there
+  // lag behind touch scrolling (it stepped) and pulled it away from its notification.
+  const smallScreen = window.matchMedia('(max-width: 900px)');
   function updateHero(sy) {
+    if (smallScreen.matches) {
+      if (!tilt.static) {
+        tilt.static = true;
+        heroCopy.style.transform = '';
+        heroCopy.style.opacity = '';
+        heroPhone.style.transform = '';
+        heroHolder.style.opacity = '';
+      }
+      return;
+    }
+    tilt.static = false;
     const hp = clamp(sy / H);
     if (hp >= 1 && tilt.done) return;
     tilt.done = hp >= 1;

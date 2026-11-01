@@ -88,9 +88,17 @@
       menuBtn.setAttribute('aria-expanded', String(open));
       menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
       menu.classList.toggle('is-open', open);
-      document.body.classList.toggle('menu-open', open);
     };
-    menuBtn.addEventListener('click', () => set(!menu.classList.contains('is-open')));
+    menuBtn.addEventListener('click', (e) => { e.stopPropagation(); set(!menu.classList.contains('is-open')); });
+    // it's a small panel now, so tapping anywhere else or scrolling away closes it
+    document.addEventListener('click', (e) => {
+      if (menu.classList.contains('is-open') && !menu.contains(e.target)) set(false);
+    });
+    let openedAt = 0;
+    menuBtn.addEventListener('click', () => { openedAt = window.scrollY; });
+    window.addEventListener('scroll', () => {
+      if (menu.classList.contains('is-open') && Math.abs(window.scrollY - openedAt) > 60) set(false);
+    }, { passive: true });
     menu.addEventListener('click', (e) => { if (e.target.closest('a')) set(false); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && menu.classList.contains('is-open')) set(false); });
     window.matchMedia('(min-width: 961px)').addEventListener('change', (m) => m.matches && set(false));
