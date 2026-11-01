@@ -1,29 +1,532 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aevox — Whale Wallet Tracker</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #0a0a0f; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; }
-    h1 { font-size: 3rem; font-weight: 700; letter-spacing: -1px; margin-bottom: 1rem; }
-    h1 span { color: #6C63FF; }
-    p { font-size: 1.2rem; color: #aaa; max-width: 500px; line-height: 1.6; margin-bottom: 2rem; }
-    .badges { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-    .badge { background: #1a1a2e; border: 1px solid #333; padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.95rem; color: #ccc; }
-    footer { position: fixed; bottom: 1.5rem; font-size: 0.85rem; color: #555; }
-    footer a { color: #6C63FF; text-decoration: none; }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Aevox: Whale Wallet Alerts for iOS &amp; Android</title>
+  <meta name="description" content="Aevox tracks whale wallets, insiders and smart traders on-chain and sends you a push alert the moment they move, with the context to understand why.">
+  <meta name="apple-itunes-app" content="app-id=6760921113">
+  <meta name="theme-color" content="#04040a">
+  <link rel="canonical" href="https://aevox.xyz/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Aevox">
+  <meta property="og:url" content="https://aevox.xyz/">
+  <meta property="og:title" content="Aevox: Whales move first. Now you know the moment they do.">
+  <meta property="og:description" content="Real-time whale alerts, insider selling warnings and smart traders worth following. Free on iOS and Android.">
+  <meta property="og:image" content="https://aevox.xyz/assets/img/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <link rel="preload" href="/assets/fonts/schibsted-grotesk.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/newsreader-italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/home.css">
 </head>
-<body>
-  <h1><span>Aevox</span></h1>
-  <p>Track whale wallets and get instant push notifications when smart money moves on-chain — with context.</p>
-  <div class="badges">
-    <div class="badge">📱 iOS &amp; Android</div>
-    <div class="badge">🐋 Whale Tracking</div>
-    <div class="badge">🔔 Instant Alerts</div>
+
+<body class="home">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Icon sprite -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="nav-glass" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.0035 0.045" numOctaves="2" seed="7" result="noise"/>
+      <feGaussianBlur in="noise" stdDeviation="2.5" result="soft"/>
+      <feDisplacementMap in="SourceGraphic" in2="soft" scale="34" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <symbol id="i-apple" viewBox="0 0 24 24"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M22.018 13.298l-3.919 2.218-3.515-3.493 3.543-3.521 3.891 2.202a1.49 1.49 0 0 1 0 2.594zM1.337.924a1.486 1.486 0 0 0-.112.568v21.017c0 .217.045.419.124.6l11.155-11.087L1.337.924zm12.207 10.065l3.258-3.238L3.45.195a1.466 1.466 0 0 0-.946-.179l11.04 10.973zm0 2.067l-11 10.933c.298.036.612-.016.906-.183l13.324-7.54-3.23-3.21z"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 10 10"><path d="M1.5 3.5 5 7l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-signal" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></symbol>
+    <symbol id="i-wifi" viewBox="0 0 16 12"><path d="M8 11.6 10.3 9a3.3 3.3 0 0 0-4.6 0zM3.4 6.5a6.7 6.7 0 0 1 9.2 0l-1.4 1.6a4.6 4.6 0 0 0-6.4 0zM.9 3.7a10.4 10.4 0 0 1 14.2 0l-1.4 1.6a8.3 8.3 0 0 0-11.4 0z"/></symbol>
+    <symbol id="i-feed" viewBox="0 0 24 24"><rect x="4" y="13" width="4" height="7" rx="1.2"/><rect x="10" y="9" width="4" height="11" rx="1.2"/><rect x="16" y="4" width="4" height="16" rx="1.2"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="7.5"/><path d="M12 1.8v3M12 19.2v3M1.8 12h3M19.2 12h3"/></g><circle cx="12" cy="12" r="2.6"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"><path d="M12 2.8 19.5 6v5.4c0 4.6-3.2 8.5-7.5 9.9-4.3-1.4-7.5-5.3-7.5-9.9V6z"/><path d="m8.8 12 2.2 2.2 4.3-4.4"/></g></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="3.4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M5.3 18.7l1.5-1.5M17.2 6.8l1.5-1.5"/></g></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5 8 12l7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M6 11H5v10h14V11h-1"/></g></symbol>
+    <symbol id="i-warn" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2.5 20h19z"/><path d="M12 10v4.5M12 17.4v.1"/></g></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></g></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </svg>
+
+  <canvas class="ocean" aria-hidden="true"></canvas>
+
+  <!-- ============ Navigation ============ -->
+  <header class="nav" data-nav>
+    <a class="brand" href="/#top" aria-label="Aevox home"><span class="brand-mark" aria-hidden="true">Æ</span><span>Aevox</span></a>
+
+    <nav class="nav-links" aria-label="Primary">
+      <a href="/#top" data-nav-link="top">Home</a>
+      <a href="/#how" data-nav-link="how">How it works</a>
+      <a href="/#pricing" data-nav-link="pricing">Pricing</a>
+      <a href="/#faq" data-nav-link="faq">FAQ</a>
+      <a href="/#support" data-nav-link="support">Support</a>
+      <div class="nav-legal">
+        <button type="button" aria-expanded="false" aria-controls="legal-menu" data-legal-toggle>Legal <svg aria-hidden="true"><use href="#i-chev"/></svg></button>
+        <div class="legal-menu" id="legal-menu" hidden>
+          <a href="/privacy.html">Privacy Policy<small>What we collect and why</small></a>
+          <a href="/terms.html">Terms of Service<small>The rules for using Aevox</small></a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="nav-end">
+      <span class="nav-depth mono" data-depth-readout aria-hidden="true">0 m</span>
+      <a class="btn btn-sm btn-light" href="#download" data-store="auto">Get the app</a>
+      <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle><span></span><span></span></button>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu" data-menu>
+    <ol>
+      <li><a href="/#top">Home</a></li>
+      <li><a href="/#how">How it works</a></li>
+      <li><a href="/#pricing">Pricing</a></li>
+      <li><a href="/#faq">FAQ</a></li>
+      <li><a href="/#support">Support</a></li>
+    </ol>
+    <div>
+      <div class="mobile-menu-legal"><a href="/privacy.html">Privacy Policy</a><a href="/terms.html">Terms of Service</a></div>
+      <div class="store-row">
+        <a class="store-btn" href="https://apps.apple.com/us/app/aevox/id6760921113" data-store="ios"><svg aria-hidden="true"><use href="#i-apple"/></svg><span><small>Download on the</small><b>App Store</b></span></a>
+        <a class="store-btn" href="https://play.google.com/store/apps/details?id=com.aevox.aevox" data-store="android"><svg aria-hidden="true"><use href="#i-play"/></svg><span><small>Get it on</small><b>Google Play</b></span></a>
+      </div>
+    </div>
   </div>
-  <footer><a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="terms.html">Terms of Service</a></footer>
+
+  <!-- Depth gauge -->
+  <aside class="gauge" aria-hidden="true">
+    <div class="gauge-track">
+      <span class="gauge-fill"></span>
+      <ol class="gauge-ticks"><li>0</li><li>1000</li><li>2000</li><li>3000</li><li>4000</li></ol>
+      <span class="gauge-marker"><b class="mono" data-depth-value>0</b><i class="mono">m</i></span>
+    </div>
+    <p class="gauge-zone mono" data-depth-zone>Sunlight zone</p>
+  </aside>
+
+  <main id="main">
+
+    <!-- ============ Hero ============ -->
+    <section class="hero" id="top" data-section="top">
+      <div class="hero-inner wrap">
+        <div class="hero-copy">
+          <p class="eyebrow mono hero-anim" style="--d:0"><span class="live-dot"></span>Live on Ethereum &amp; BSC</p>
+          <h1 class="hero-title">
+            <span class="line"><span class="hero-anim" style="--d:1">Whales move</span></span>
+            <span class="line"><span class="hero-anim serif" style="--d:2">first.</span></span>
+          </h1>
+          <p class="hero-sub hero-anim" style="--d:3">Now you know the moment they do.</p>
+          <p class="hero-body hero-anim" style="--d:4">Aevox watches the wallets that move markets and pings you the second they act. Whales, insiders, traders with a track record. Every alert comes with the context to tell a dump from a shuffle.</p>
+          <div class="store-row hero-anim" style="--d:5">
+            <a class="store-btn" href="https://apps.apple.com/us/app/aevox/id6760921113" data-store="ios"><svg aria-hidden="true"><use href="#i-apple"/></svg><span><small>Download on the</small><b>App Store</b></span></a>
+            <a class="store-btn" href="https://play.google.com/store/apps/details?id=com.aevox.aevox" data-store="android"><svg aria-hidden="true"><use href="#i-play"/></svg><span><small>Get it on</small><b>Google Play</b></span></a>
+          </div>
+          <p class="hero-note mono hero-anim" style="--d:6">Free to start <i>·</i> No wallet connection <i>·</i> iOS &amp; Android</p>
+        </div>
+
+        <div class="hero-stage hero-anim" style="--d:3" data-hero-stage>
+          <div class="sonar-rings" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="phone-holder" data-phone-holder>
+          <div class="phone" data-tilt>
+            <div class="phone-screen">
+              <div class="scr scr-feed">
+                <div class="sb"><span>15:08</span><span class="sb-icons"><svg><use href="#i-signal"/></svg><svg><use href="#i-wifi"/></svg><span class="batt">93</span></span></div>
+                <div class="scr-head"><h3>Activity</h3><span class="live-pill">LIVE</span><span class="sort-pill">Recent</span></div>
+                <div class="chips"><span class="chip on">All</span><span class="chip">Sells</span><span class="chip">Buys</span><span class="chip">Transfers</span><span class="chip">Insiders</span></div>
+                <div class="chips"><span class="chip on dot">ETH</span><span class="chip dot dim">BSC</span></div>
+                <p class="scr-updated">Updated just now</p>
+                <p class="scr-day">TODAY</p>
+                <div class="feed-list" data-feed>
+                  <article class="tx sell"><div class="tx-top"><span class="av">E</span><b>ETH whale</b><span class="amt">−$2.8M<small>1,200 ETH</small></span></div><span class="tag">↓ Sent to exchange · likely selling</span><p class="tx-meta">24h after: <b>in 23h</b></p><div class="tx-foot"><span>4 minutes ago</span><span class="pill conf">88%</span><span class="pill">ETH</span></div></article>
+                  <article class="tx buy"><div class="tx-top"><span class="av">S</span><b>Smart trader #2</b><span class="amt">+$224K<small>56,978,482,500 PEPE</small></span></div><span class="tag">↑ Bought PEPE</span><p class="tx-meta">paid 95 ETH</p><div class="tx-foot"><span>about an hour ago</span><span class="pill">ETH</span></div></article>
+                  <article class="tx sell"><div class="tx-top"><span class="av">S</span><b>Smart trader #5</b><span class="amt">−$540K<small>46,730 LINK</small></span></div><span class="tag">↓ Sold LINK</span><p class="tx-meta">received 540,000 USDC</p><div class="tx-foot"><span>2 hours ago</span><span class="pill">ETH</span></div></article>
+                  <article class="tx buy"><div class="tx-top"><span class="av">E</span><b>Early PEPE buyer</b><span class="amt">+$142K<small>35,986,410,000 PEPE</small></span></div><span class="tag">↑ Bought PEPE</span><p class="tx-meta">24h after: <b>+18.4%</b></p><div class="tx-foot"><span>a day ago</span><span class="pill">ETH</span></div></article>
+                </div>
+                <nav class="tabbar" aria-hidden="true"><span class="on"><svg><use href="#i-feed"/></svg>Feed</span><span><svg><use href="#i-target"/></svg>Watchlist</span><span><svg><use href="#i-shield"/></svg>Guard</span><span><svg><use href="#i-gear"/></svg>Settings</span></nav>
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="float-alert" data-float-alert aria-hidden="true">
+            <span class="float-icon">Æ</span>
+            <span><b data-float-title>ETH whale · −$2.8M</b><small data-float-body>1,200 ETH sent to Binance</small></span>
+          </div>
+        </div>
+      </div>
+
+      <a class="dive-cue" href="#wake"><span class="mono">Dive</span><i aria-hidden="true"></i></a>
+    </section>
+
+    <!-- ============ Whale pass ============ -->
+    <section class="wake" id="wake" aria-label="What Aevox watches">
+      <div class="wake-sticky">
+        <div class="wake-glow" aria-hidden="true"></div>
+        <div class="whale" data-whale aria-hidden="true">
+          <!-- three layers: only the tail and fin move, so the body (with its blur) never repaints -->
+
+          <svg class="whale-body" viewBox="0 0 1010 420">
+            <defs>
+              <linearGradient id="wb" gradientUnits="userSpaceOnUse" x1="0" y1="100" x2="0" y2="312">
+                <stop offset="0" stop-color="#2d2769"/>
+                <stop offset=".55" stop-color="#17143a"/>
+                <stop offset="1" stop-color="#0c0a20"/>
+              </linearGradient>
+              <clipPath id="whale-body-clip"><path d="M20 216C14 190 44 160 100 140 160 122 228 110 300 108 420 106 520 116 596 134 612 138 622 132 632 118 640 106 652 106 654 120 658 140 690 156 740 170 790 180 816 182 828 185C838 188 838 197 828 200C790 210 730 230 660 256 580 286 480 306 380 308 280 310 196 298 128 274 70 254 26 240 20 216Z"/></clipPath>
+              <filter id="whale-soft" x="-5%" y="-20%" width="110%" height="140%"><feGaussianBlur stdDeviation="7"/></filter>
+            </defs>
+            <path fill="url(#wb)" d="M20 216C14 190 44 160 100 140 160 122 228 110 300 108 420 106 520 116 596 134 612 138 622 132 632 118 640 106 652 106 654 120 658 140 690 156 740 170 790 180 816 182 828 185C838 188 838 197 828 200C790 210 730 230 660 256 580 286 480 306 380 308 280 310 196 298 128 274 70 254 26 240 20 216Z"/>
+            <g clip-path="url(#whale-body-clip)"><path fill="none" stroke="#b3a8ff" stroke-opacity=".55" stroke-width="16" filter="url(#whale-soft)" d="M20 216C14 190 44 160 100 140 160 122 228 110 300 108 420 106 520 116 596 134 612 138 622 132 632 118 640 106 652 106 654 120 658 140 690 156 740 170 790 180 816 182 840 184"/></g>
+            <g fill="none" stroke="#a79bff" stroke-opacity=".14" stroke-width="2" stroke-linecap="round"><path d="M40 236C140 270 280 290 470 290"/><path d="M62 248C160 280 290 298 440 298"/><path d="M92 260C180 288 290 304 400 304"/></g>
+            <path fill="none" stroke="#06050f" stroke-opacity=".7" stroke-width="3" stroke-linecap="round" d="M26 210C80 214 140 212 196 200"/>
+            <circle cx="186" cy="188" r="5" fill="#06050f"/><circle cx="187.5" cy="186.5" r="1.6" fill="#c9c2ff"/>
+            <g fill="#a79bff" fill-opacity=".22"><circle cx="60" cy="176" r="3"/><circle cx="84" cy="164" r="3"/><circle cx="110" cy="155" r="2.6"/><circle cx="72" cy="196" r="2.4"/><circle cx="98" cy="186" r="2.4"/></g>
+          </svg>
+          <svg class="whale-tail" viewBox="0 0 1010 420">
+            <defs>
+              <linearGradient id="wbt" gradientUnits="userSpaceOnUse" x1="0" y1="100" x2="0" y2="312"><stop offset="0" stop-color="#2d2769"/><stop offset=".55" stop-color="#17143a"/><stop offset="1" stop-color="#0c0a20"/></linearGradient>
+              <clipPath id="whale-tail-clip"><path d="M752 171C790 179 816 182 845 182 870 170 900 140 940 124 962 116 984 114 998 116 1004 118 1002 124 996 126 976 138 962 160 956 190 964 214 978 236 990 250 994 256 988 260 982 258 940 242 890 218 845 202 815 206 790 212 752 222 744 205 744 188 752 171Z"/></clipPath>
+              <linearGradient id="whale-tail-fade" gradientUnits="userSpaceOnUse" x1="760" y1="0" x2="835" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff"/></linearGradient>
+              <mask id="whale-tail-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="1010" height="420"><rect x="0" y="0" width="1010" height="420" fill="url(#whale-tail-fade)"/></mask>
+              <filter id="whale-tail-soft" x="-5%" y="-30%" width="110%" height="160%"><feGaussianBlur stdDeviation="7"/></filter>
+            </defs>
+            <g mask="url(#whale-tail-mask)">
+            <path fill="url(#wbt)" d="M752 171C790 179 816 182 845 182 870 170 900 140 940 124 962 116 984 114 998 116 1004 118 1002 124 996 126 976 138 962 160 956 190 964 214 978 236 990 250 994 256 988 260 982 258 940 242 890 218 845 202 815 206 790 212 752 222 744 205 744 188 752 171Z"/>
+            <g clip-path="url(#whale-tail-clip)"><path fill="none" stroke="#b3a8ff" stroke-opacity=".55" stroke-width="16" filter="url(#whale-tail-soft)" d="M690 156C740 170 790 180 845 182 870 170 900 140 940 124 962 116 984 114 998 116"/></g>
+            </g>
+          </svg>
+          <svg class="whale-fin" viewBox="0 0 1010 420"><path fill="#1c1846" d="M250 252C290 276 330 318 372 360 390 378 420 392 448 396 462 398 466 388 456 380 420 352 380 300 330 252 306 236 268 236 250 252Z"/><path fill="none" stroke="#a79bff" stroke-opacity=".25" stroke-width="2" d="M250 252C290 276 330 318 372 360 390 378 420 392 448 396"/></svg>
+        </div>
+        <div class="wake-copy wrap">
+          <p class="eyebrow mono" data-depth-label>Twilight zone</p>
+          <h2 class="wake-text" data-wake-text>One wallet can move a market. Aevox keeps an eye on the ones that do.</h2>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ How it works ============ -->
+    <section class="how" id="how" data-section="how">
+      <header class="section-head wrap">
+        <p class="eyebrow mono" data-depth-label>How it works</p>
+        <h2 class="section-title" data-split>From splash <span class="soft">to signal.</span></h2>
+        <p class="section-lede" data-reveal>Four things Aevox does for you, in the order you'll feel them.</p>
+      </header>
+
+      <div class="how-grid wrap">
+        <div class="how-stage">
+          <div class="how-phone-wrap">
+            <div class="sonar-rings small" aria-hidden="true"><span></span><span></span></div>
+            <div class="phone" data-steps-phone>
+              <div class="phone-screen">
+
+                <!-- 1. Discover -->
+                <div class="scr scr-discover step-screen is-active" data-screen="0">
+                  <div class="sb"><span>15:53</span><span class="sb-icons"><svg><use href="#i-signal"/></svg><svg><use href="#i-wifi"/></svg><span class="batt">100</span></span></div>
+                  <div class="scr-head back"><svg><use href="#i-back"/></svg><h3>Discover</h3></div>
+                  <div class="seg"><span class="on">Smart traders</span><span>Known wallets</span></div>
+                  <div class="trader-list">
+                    <article class="trader"><span class="rank">#7</span><div><b>0x87c0…e373</b><p class="gain">+$16,405 realised · 90 days</p><p>51 trades · 23 profitable</p><small>Best: wildebeest +$5,069</small></div><span class="track is-on">Tracking</span></article>
+                    <article class="trader"><span class="rank">#8</span><div><b>0x08b6…6ccf</b><p class="gain">+$15,501 realised · 90 days</p><p>107 trades · 55 profitable</p><small>Best: AP +$5,534</small></div><span class="track" data-track-btn>Track</span></article>
+                    <article class="trader"><span class="rank">#9</span><div><b>0x1509…3944</b><p class="gain">+$15,091 realised · 90 days</p><p>219 trades · 94 profitable</p><small>Best: OCM +$2,366</small></div><span class="track">Track</span></article>
+                    <article class="trader"><span class="rank">#10</span><div><b>0x00f4…742a</b><p class="gain">+$12,852 realised · 90 days</p><p>97 trades · 41 profitable</p><small>Best: FOLD +$4,531</small></div><span class="track">Track</span></article>
+                  </div>
+                  <nav class="tabbar" aria-hidden="true"><span><svg><use href="#i-feed"/></svg>Feed</span><span class="on"><svg><use href="#i-target"/></svg>Watchlist</span><span><svg><use href="#i-shield"/></svg>Guard</span><span><svg><use href="#i-gear"/></svg>Settings</span></nav>
+                </div>
+
+                <!-- 2. Lock screen -->
+                <div class="scr scr-lock step-screen" data-screen="1">
+                  <div class="sb"><span></span><span class="sb-icons"><svg><use href="#i-signal"/></svg><svg><use href="#i-wifi"/></svg><span class="batt">93</span></span></div>
+                  <p class="lock-date" data-lock-date>Tuesday 3 November</p>
+                  <p class="lock-time">15:08</p>
+                  <div class="notes">
+                    <div class="note"><span class="note-icon">Æ</span><div><p class="note-head"><b>Aevox</b><span>now</span></p><p class="note-title">ETH whale · −$2.8M</p><p>Sent 1,200 ETH to Binance. Likely selling.</p></div></div>
+                    <div class="note"><span class="note-icon">Æ</span><div><p class="note-head"><b>Aevox</b><span>2m ago</span></p><p class="note-title">Insider move · PENDLE</p><p>Treasury moved 1.7% of supply to an exchange.</p></div></div>
+                    <div class="note"><span class="note-icon">Æ</span><div><p class="note-head"><b>Aevox</b><span>1h ago</span></p><p class="note-title">Smart trader #2 · +$224K</p><p>Bought PEPE, paid 95 ETH.</p></div></div>
+                  </div>
+                </div>
+
+                <!-- 3. Alert detail -->
+                <div class="scr scr-detail step-screen" data-screen="2">
+                  <div class="sb"><span>15:09</span><span class="sb-icons"><svg><use href="#i-signal"/></svg><svg><use href="#i-wifi"/></svg><span class="batt">94</span></span></div>
+                  <div class="scr-head back"><svg><use href="#i-back"/></svg><h3>Alert Detail</h3><span class="pill">eth</span><svg class="share"><use href="#i-share"/></svg></div>
+                  <div class="card hero-card"><div class="tx-top"><span class="av">T</span><b>Treasury / contract</b></div><p class="big-amt">−$6,198,000.00</p><p class="dim">3,000,000 PENDLE</p><span class="tag">↓ PENDLE insider → exchange · likely selling</span></div>
+                  <div class="card"><p class="card-label">WHAT HAPPENED NEXT</p><div class="next"><div><small>1h</small><b class="up">+0.1%</b></div><div><small>24h</small><b class="down">−2.4%</b></div><div><small>7d</small><b class="dim">in 40m</b></div></div><p class="dim tiny">PENDLE price after this alert. Not a prediction.</p></div>
+                  <div class="card"><p class="card-label">INSIDER MOVE</p><dl><dt>WHO</dt><dd>Treasury / contract · Insider</dd><dt>WHERE</dt><dd>Exchange · likely selling</dd><dt>SIZE</dt><dd>1.7% of supply · 13% of 24h volume <span class="major">MAJOR</span></dd></dl></div>
+                  <div class="card"><p class="card-label">FLOW</p><dl class="flow"><dt>FROM</dt><dd><b>Treasury / contract</b><span>0x4f30a9d41b80ecc5b94306ab4364951ae3170210</span></dd><dt>TO</dt><dd><b>Binance</b><span>0x28c6c06298d514db089934071355e5743bf21d60</span></dd></dl></div>
+                  <nav class="tabbar" aria-hidden="true"><span class="on"><svg><use href="#i-feed"/></svg>Feed</span><span><svg><use href="#i-target"/></svg>Watchlist</span><span><svg><use href="#i-shield"/></svg>Guard</span><span><svg><use href="#i-gear"/></svg>Settings</span></nav>
+                </div>
+
+                <!-- 4. Guard -->
+                <div class="scr scr-guard step-screen" data-screen="3">
+                  <div class="sb"><span>15:09</span><span class="sb-icons"><svg><use href="#i-signal"/></svg><svg><use href="#i-wifi"/></svg><span class="batt">94</span></span></div>
+                  <div class="scr-head"><div><h3>Guard</h3><p class="dim tiny">2 / 15 tokens guarded</p></div><span class="plus">+</span></div>
+                  <div class="card warn-card"><p class="card-label">YOUR BAGS THIS WEEK</p><p class="warn-title"><svg><use href="#i-warn"/></svg>Insiders moved</p><p class="dim">PENDLE: 1 insider move (latest 1.7% → exchange) · QNT: no insider selling</p></div>
+                  <div class="card guard-row"><span class="shield"><svg><use href="#i-shield"/></svg></span><div><b>QNT <span class="pill">ETH</span></b><p class="dim">25 insiders watched</p><p class="dim">Quiet: no insider moves yet</p></div><svg class="chev"><use href="#i-back"/></svg></div>
+                  <div class="card guard-row"><span class="shield"><svg><use href="#i-shield"/></svg></span><div><b>PENDLE <span class="pill">ETH</span></b><p class="dim">25 insiders watched</p><p class="dim">Last move 7 days ago · 1.7% → exchange</p></div><svg class="chev"><use href="#i-back"/></svg></div>
+                  <nav class="tabbar" aria-hidden="true"><span><svg><use href="#i-feed"/></svg>Feed</span><span><svg><use href="#i-target"/></svg>Watchlist</span><span class="on"><svg><use href="#i-shield"/></svg>Guard</span><span><svg><use href="#i-gear"/></svg>Settings</span></nav>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <ol class="step-dots" aria-hidden="true"><li class="is-active"></li><li></li><li></li><li></li></ol>
+        </div>
+
+        <ol class="steps">
+          <li class="step" data-step="0">
+            <p class="step-num mono">01</p>
+            <h3>Pick who to follow</h3>
+            <p>Paste any public address, or browse Discover: smart traders ranked by realised profit over 90 days, plus wallets that are already known and labelled. Tap Track and you're set.</p>
+          </li>
+          <li class="step" data-step="1">
+            <p class="step-num mono">02</p>
+            <h3>Feel the ping</h3>
+            <p>When a tracked wallet moves size, your phone buzzes. You set the floor, anywhere from $250 to $500K, so a forty-dollar swap never wakes you at 3am.</p>
+          </li>
+          <li class="step" data-step="2">
+            <p class="step-num mono">03</p>
+            <h3>Read the whole story</h3>
+            <p>Each alert explains itself: who moved, where it went, how big it is against supply and daily volume, and what the price did 1 hour, 24 hours and 7 days later. Labels like “likely selling” are inferences, and we say so.</p>
+          </li>
+          <li class="step" data-step="3">
+            <p class="step-num mono">04</p>
+            <h3>Guard your bags</h3>
+            <p>Add the tokens you hold. Aevox finds their insiders and largest holders and watches them for you. If a treasury starts walking coins to an exchange, you'll hear about it.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ Signal / sonar ============ -->
+    <section class="signal" id="signal" data-section="how">
+      <div class="signal-grid wrap">
+        <div class="signal-copy">
+          <p class="eyebrow mono" data-depth-label>Signal, not noise</p>
+          <h2 class="section-title" data-split>Turn the noise <span class="soft">down.</span></h2>
+          <p class="section-lede" data-reveal>Most on-chain activity is dust. Drag the floor and watch the sonar go quiet. It's the same Min Alert Size control you get in the app.</p>
+
+          <div class="controls" data-reveal>
+            <div class="slider-row">
+              <label for="floor" class="mono">Min alert size</label>
+              <output class="mono" for="floor" data-floor-out>$100K</output>
+            </div>
+            <input type="range" id="floor" min="0" max="1000" value="822" data-floor aria-describedby="floor-hint">
+            <div class="slider-scale mono" id="floor-hint"><span>$250</span><span>$500K</span></div>
+
+            <fieldset class="type-chips">
+              <legend class="sr-only">Transaction types</legend>
+              <label class="tchip" style="--c:var(--red)"><input type="checkbox" value="sell" checked><span>Sells</span></label>
+              <label class="tchip" style="--c:var(--green)"><input type="checkbox" value="buy" checked><span>Buys</span></label>
+              <label class="tchip" style="--c:var(--violet-2)"><input type="checkbox" value="transfer" checked><span>Transfers</span></label>
+              <label class="tchip" style="--c:var(--amber)"><input type="checkbox" value="insider" checked><span>Insiders</span></label>
+            </fieldset>
+            <p class="sonar-count mono" aria-live="polite" data-sonar-count>Showing 9 of 32 moves</p>
+          </div>
+        </div>
+
+        <div class="sonar" data-sonar aria-hidden="true">
+          <div class="sonar-grid"></div>
+          <div class="sonar-sweep"></div>
+          <div class="sonar-blips" data-blips></div>
+          <span class="sonar-center"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Pricing ============ -->
+    <section class="pricing" id="pricing" data-section="pricing">
+      <header class="section-head wrap center">
+        <p class="eyebrow mono" data-depth-label>Pricing</p>
+        <h2 class="section-title" data-split>Start free. <span class="soft">Go deeper when it pays.</span></h2>
+        <p class="section-lede" data-reveal>No trial clock and no card up front. The free tier is the trial, for as long as you like.</p>
+      </header>
+
+      <div class="plans wrap">
+        <article class="plan" data-reveal style="--i:0">
+          <p class="plan-depth mono">Surface</p>
+          <h3>Free</h3>
+          <p class="plan-price"><b>$0</b><span>forever</span></p>
+          <ul>
+            <li>Live whale feed on Ethereum &amp; BSC</li>
+            <li>Push alerts for wallets you track</li>
+            <li>Discover smart traders</li>
+            <li>7 days of alert history</li>
+          </ul>
+          <a class="btn btn-ghost" href="#download" data-store="auto">Download free</a>
+        </article>
+
+        <article class="plan" data-reveal style="--i:1">
+          <p class="plan-depth mono">Twilight</p>
+          <h3>Premium</h3>
+          <p class="plan-price"><b>Monthly</b><span>or yearly</span></p>
+          <ul>
+            <li>Everything in Free</li>
+            <li>Track more wallets and tokens</li>
+            <li>Guard for the tokens you hold</li>
+            <li>30 days of alert history</li>
+          </ul>
+          <a class="btn btn-ghost" href="#download" data-store="auto">Upgrade in the app</a>
+        </article>
+
+        <article class="plan plan-deep" data-reveal style="--i:2">
+          <p class="plan-depth mono">Abyss <span class="plan-badge">Deepest</span></p>
+          <h3>Premium+</h3>
+          <p class="plan-price"><b>Monthly</b><span>or yearly</span></p>
+          <ul>
+            <li>Everything in Premium</li>
+            <li>Confidence breakdowns and wallet win rates</li>
+            <li>Solana wallet tracking (early access)</li>
+            <li>90 days of alert history</li>
+          </ul>
+          <a class="btn btn-light" href="#download" data-store="auto">Go Premium+</a>
+        </article>
+      </div>
+      <p class="plans-note wrap" data-reveal>Paid plans are billed through the App Store or Google Play and renew until you cancel. You'll see exact prices in your local currency inside the app.</p>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="faq" id="faq" data-section="faq">
+      <div class="faq-grid wrap">
+        <header class="faq-head">
+          <p class="eyebrow mono" data-depth-label>FAQ</p>
+          <h2 class="section-title" data-split>Questions from <span class="soft">the surface.</span></h2>
+          <p class="section-lede" data-reveal>Can't find yours? <a href="#support">Ask us directly.</a></p>
+        </header>
+
+        <div class="faq-list">
+          <details data-reveal>
+            <summary>Is Aevox financial advice?</summary>
+            <div class="faq-a"><p>No. Aevox is an information tool. Alerts, confidence scores, win rates and labels like “likely selling” describe what happened on-chain and what similar patterns looked like before. They aren't predictions or recommendations, and what you do with them is your call.</p></div>
+          </details>
+          <details data-reveal>
+            <summary>Do I have to connect my wallet?</summary>
+            <div class="faq-a"><p>Never. Aevox only reads public blockchain data. We don't ask for private keys, seed phrases or wallet access, and we can't touch your funds.</p></div>
+          </details>
+          <details data-reveal>
+            <summary>Which chains are supported?</summary>
+            <div class="faq-a"><p>Ethereum and BSC today. Solana wallet tracking is in early access for Premium+ subscribers.</p></div>
+          </details>
+          <details data-reveal>
+            <summary>What does “likely selling” mean?</summary>
+            <div class="faq-a"><p>When a wallet sends tokens to an exchange, a sale often follows. Aevox flags that pattern automatically. It's an inference from on-chain behaviour, not a confirmed trade, which is why the label says “likely”.</p></div>
+          </details>
+          <details data-reveal>
+            <summary>What is the percentage on an alert?</summary>
+            <div class="faq-a"><p>That's the confidence score: an algorithmic estimate built from historical on-chain patterns. Premium+ shows you how it was calculated. Treat it as context, not a forecast.</p></div>
+          </details>
+          <details data-reveal>
+            <summary>Is there a free trial?</summary>
+            <div class="faq-a"><p>The free tier is the trial, and it doesn't expire. Upgrade when you want more history, more tracked wallets or the Premium+ analytics.</p></div>
+          </details>
+          <details data-reveal>
+            <summary>How do I cancel a subscription?</summary>
+            <div class="faq-a"><p>Billing runs through Apple or Google, so you cancel in your App Store or Google Play subscription settings. Do it at least 24 hours before the renewal date. Refunds are handled by Apple or Google under their own policies.</p></div>
+          </details>
+          <details data-reveal>
+            <summary>Can I track any address?</summary>
+            <div class="faq-a"><p>Any public wallet, yes. Burn addresses, null addresses and high-volume contracts (liquidity pools, DEX routers, bridges, protocol treasuries) aren't allowed on watchlists. They flood the system with noise and get accounts suspended.</p></div>
+          </details>
+          <details data-reveal>
+            <summary>How do I delete my account?</summary>
+            <div class="faq-a"><p>Email <a href="mailto:privacy@aevox.xyz">privacy@aevox.xyz</a> from the address you signed up with. Your personal data is deleted or anonymised within 30 days. See the <a href="/privacy.html">Privacy Policy</a> for details.</p></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Support ============ -->
+    <section class="support" id="support" data-section="support">
+      <header class="section-head wrap">
+        <p class="eyebrow mono" data-depth-label>Support</p>
+        <h2 class="section-title" data-split>Need a hand? <span class="soft">Send up a flare.</span></h2>
+        <p class="section-lede" data-reveal>Pick the right inbox and we'll get back to you faster.</p>
+      </header>
+
+      <div class="contacts wrap">
+        <a class="contact" href="mailto:aevox@aevox.xyz" data-reveal style="--i:0">
+          <span class="contact-icon"><svg><use href="#i-mail"/></svg></span>
+          <p class="mono contact-label">General</p>
+          <h3>aevox@aevox.xyz</h3>
+          <p>Questions, feedback, bug reports, feature ideas.</p>
+          <svg class="contact-arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+        </a>
+        <a class="contact" id="delete-account" href="mailto:privacy@aevox.xyz?subject=Account%20deletion%20request" data-reveal style="--i:1">
+          <span class="contact-icon"><svg><use href="#i-shield"/></svg></span>
+          <p class="mono contact-label">Privacy &amp; account deletion</p>
+          <h3>privacy@aevox.xyz</h3>
+          <p>Data requests, or delete your account and data. We answer within 30 days.</p>
+          <svg class="contact-arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+        </a>
+        <a class="contact" href="mailto:legal@aevox.xyz" data-reveal style="--i:2">
+          <span class="contact-icon"><svg><use href="#i-check"/></svg></span>
+          <p class="mono contact-label">Legal</p>
+          <h3>legal@aevox.xyz</h3>
+          <p>Questions about the <span class="u">Terms of Service</span> or anything legal.</p>
+          <svg class="contact-arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ Final CTA / sea floor ============ -->
+    <section class="floor" id="download">
+      <div class="floor-inner wrap">
+        <p class="eyebrow mono" data-depth-label>Abyssal zone</p>
+        <h2 class="floor-title" data-split>The next big move <span class="serif">is already on-chain.</span></h2>
+        <p class="section-lede" data-reveal>Be there when it surfaces.</p>
+        <div class="store-row center" data-reveal>
+          <a class="store-btn" href="https://apps.apple.com/us/app/aevox/id6760921113" data-store="ios"><svg aria-hidden="true"><use href="#i-apple"/></svg><span><small>Download on the</small><b>App Store</b></span></a>
+          <a class="store-btn" href="https://play.google.com/store/apps/details?id=com.aevox.aevox" data-store="android"><svg aria-hidden="true"><use href="#i-play"/></svg><span><small>Get it on</small><b>Google Play</b></span></a>
+        </div>
+      </div>
+      <div class="seabed" aria-hidden="true">
+        <svg class="kelp" viewBox="0 0 1440 260" preserveAspectRatio="none">
+          <g class="kelp-a"><path d="M180 260C170 210 196 170 178 120 166 86 186 50 176 10" /></g>
+          <g class="kelp-b"><path d="M214 260C222 220 200 190 214 150 224 120 206 96 216 60" /></g>
+          <g class="kelp-a"><path d="M1238 260C1228 200 1254 160 1238 110 1226 76 1246 40 1236 0" /></g>
+          <g class="kelp-b"><path d="M1276 260C1284 214 1262 184 1276 146 1286 116 1268 90 1278 56" /></g>
+          <g class="kelp-b"><path d="M1196 260C1204 230 1188 210 1198 180" /></g>
+        </svg>
+        <svg class="dunes" viewBox="0 0 1440 200" preserveAspectRatio="none">
+          <path fill="#0b0a1c" d="M0 120C160 80 300 70 460 96S760 150 940 120 1260 60 1440 92V200H0Z"/>
+          <path fill="#070612" d="M0 160C200 130 360 140 520 156S860 180 1040 150 1300 128 1440 140V200H0Z"/>
+        </svg>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ Footer ============ -->
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <a class="brand" href="/#top"><span class="brand-mark" aria-hidden="true">Æ</span><span>Aevox</span></a>
+          <p>On-chain wallet alerts for people who'd rather know than guess.</p>
+        </div>
+        <div>
+          <h4>Product</h4>
+          <ul><li><a href="/#how">How it works</a></li><li><a href="/#pricing">Pricing</a></li><li><a href="/#faq">FAQ</a></li></ul>
+        </div>
+        <div>
+          <h4>Help</h4>
+          <ul><li><a href="/#support">Support</a></li><li><a href="/#delete-account">Delete account</a></li><li><a href="mailto:aevox@aevox.xyz">aevox@aevox.xyz</a></li></ul>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <ul><li><a href="/privacy.html">Privacy Policy</a></li><li><a href="/terms.html">Terms of Service</a></li></ul>
+        </div>
+      </div>
+      <div class="footer-base">
+        <p>Aevox is an information tool. Nothing on this site or in the app is financial, investment or trading advice.</p>
+        <p>&copy; <span data-year>2026</span> Marko Radisavljevic</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/site.js" defer></script>
+  <script src="/assets/js/home.js" defer></script>
 </body>
 </html>
